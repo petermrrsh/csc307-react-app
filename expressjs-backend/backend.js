@@ -41,19 +41,20 @@ app.get('/', (req, res) => {
 
 app.get('/users', (req, res) => {
     const name = req.query.name;
+    const job = req.query.job;
+    filteredUsers = users['users_list'];
     if (name != undefined){
-        let result = findUserByName(name);
-        result = {users_list: result};
-        res.send(result);
-    }
-    else{
-        res.send(users);
-    }
+        filteredUsers = filteredUsers.filter((user) =>
+            user['name'] === name
+        );
+    } if (job != undefined) {
+        filteredUsers = filteredUsers.filter((user) =>
+            user['job'] === job
+        );
+    } 
+    result = {users_list: filteredUsers};
+    res.send(result);
 });
-
-const findUserByName = (name) => { 
-    return users['users_list'].filter( (user) => user['name'] === name); 
-}
 
 app.get('/users/:id', (req, res) => {
     const id = req.params['id']; //or req.params.id
@@ -68,7 +69,6 @@ app.get('/users/:id', (req, res) => {
 
 function findUserById(id) {
     return users['users_list'].find( (user) => user['id'] === id); // or line below
-    //return users['users_list'].filter( (user) => user['id'] === id);
 }
 
 app.post('/users', (req, res) => {
