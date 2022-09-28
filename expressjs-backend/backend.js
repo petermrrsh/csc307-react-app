@@ -1,3 +1,4 @@
+const cors = require('cors');
 const express = require('express');
 const app = express();
 const port = 5000;
@@ -33,6 +34,7 @@ const users = {
     ]
  }
 
+app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -73,26 +75,44 @@ function findUserById(id) {
 
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
-    addUser(userToAdd);
-    res.status(200).end();
+    userJson = addUser(userToAdd);
+    res.status(201).send(userJson).end();
 });
 
+function generateRandomUniqueID() {
+    allowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    id = "";
+    id_length = 6;
+    do {
+        for (i = 0; i < id_length; i++) {
+            index = Math.floor(Math.random()*allowedCharacters.length);
+            id += allowedCharacters[index];
+        }
+    } while (users.users_list.filter(user => user.id == id).length > 0)
+    return id;
+}
+
 function addUser(user){
+    user['id'] = generateRandomUniqueID();
     users['users_list'].push(user);
+    return user;
 }
 
 app.delete('/users', (req, res) => {
     const id = req.query.id;
     if (id === undefined) {
-        res.status(500).send("No ID specified")
+        res.status(500).send("No ID specified").end();
     } else {
         console.log(users.users_list);
         index = users.users_list.findIndex(user => user.id == id);
+        if (index == -1) {
+            res.status(404).statusMessage(`ID "${id}" does not exist`).end();
+        }
         console.log(index);
         users.users_list.splice(index, 1);
         console.log(users.users_list);
     }
-    res.status(200).end();
+    res.status(204).end();
 });
 
 app.listen(port, () => {
