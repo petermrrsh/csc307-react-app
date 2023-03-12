@@ -4,19 +4,19 @@ function Form(props) {
   const [person, setPerson] = useState(
      {
         name: "",
-        job: "",
+        password: "",
      }
   );
 
   function handleChange(event) {
     const { name, value } = event.target;
-    if (name === "job")
+    if (name === "password")
       setPerson(
-         {name: person['name'], job: value}
+         {name: person['name'], password: value}
       );
     else     
        setPerson(
-         {name: value, job: person['job']}   
+         {name: value, password: person['password']}   
        );
   }
 
@@ -27,21 +27,21 @@ function Form(props) {
 
   return (
     <form>
-      <label htmlFor="name">Name</label>
+      <label htmlFor="name">Username</label>
       <input
         type="text"
         name="name"
         id="name"
         value={person.name}
         onChange={handleChange} />
-      <label htmlFor="job">Job</label>
+      <label htmlFor="password">Password</label>
       <input
         type="text"
-        name="job"
-        id="job"
+        name="password"
+        id="password"
         value={person.job}
         onChange={handleChange} />
-      <input type="button" value="Submit" onClick={submitForm} />
+      <input type="button" value="Login" onClick={submitForm} />
     </form>
     );
 

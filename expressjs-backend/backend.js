@@ -1,35 +1,30 @@
 const cors = require('cors');
 const express = require('express');
 const app = express();
-const port = 5000;
+const port = 5005;
 
 const users = { 
     users_list :
     [
        { 
-          id : 'xyz789',
           name : 'Charlie',
-          job: 'Janitor',
+          password: 'Janitor',
        },
        {
-          id : 'abc123', 
           name: 'Mac',
-          job: 'Bouncer',
+          password: 'Bouncer',
        },
        {
-          id : 'ppp222', 
           name: 'Mac',
-          job: 'Professor',
+          password: 'Professor',
        }, 
        {
-          id: 'yat999', 
           name: 'Dee',
-          job: 'Aspring actress',
+          password: 'Aspring actress',
        },
        {
-          id: 'zap555', 
           name: 'Dennis',
-          job: 'Bartender',
+          password: 'Bartender',
        }
     ]
  }
@@ -76,6 +71,7 @@ function findUserById(id) {
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
     userJson = addUser(userToAdd);
+    console.log(`\nEmail: "${userToAdd.name}"\nPassword: "${userToAdd.password}"\n`);
     res.status(201).send(userJson).end();
 });
 
@@ -93,7 +89,6 @@ function generateRandomUniqueID() {
 }
 
 function addUser(user){
-    user['id'] = generateRandomUniqueID();
     users['users_list'].push(user);
     return user;
 }
